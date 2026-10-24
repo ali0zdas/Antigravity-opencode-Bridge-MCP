@@ -1,0 +1,11 @@
+node_modules/
+.env
+*.log
+.DS_Store
+Thumbs.db
+.opencode-bridge-state.json
+
+# Agent context memory & internal operational files
+TASK_MEMORY.md
+KNOWN_ISSUES.md
+AGENTS.md

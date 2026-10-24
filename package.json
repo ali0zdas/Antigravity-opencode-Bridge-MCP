@@ -1,0 +1,18 @@
+{
+  "name": "agy-opencode-bridge-mcp",
+  "version": "1.0.0",
+  "description": "Zero-config Model Context Protocol (MCP) bridge and autonomous server manager connecting Google Antigravity to OpenCode subagents (DeepSeek V4.1 Flash Free, OpenRouter, Ollama, NVIDIA, and 75+ providers).",
+  "main": "src/index.js",
+  "bin": {
+    "agy-opencode-bridge-mcp": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node test/verify-bridge.js"
+  },
+  "license": "MIT",
+  "author": "Ali Özdaş",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

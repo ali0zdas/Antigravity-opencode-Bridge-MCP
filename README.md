@@ -58,16 +58,16 @@ Other tools attempt to invoke `opencode run` via raw command-line child processe
 
 ### 📊 Architectural Comparison
 
-| Capability / Trait | Risky OAuth Proxy Hacks <br/> *(e.g., `opencode-antigravity-auth`)* | CLI Subprocess Wrappers <br/> *(e.g., `opencode run`)* | 🌉 **AGY-OpenCode Bridge MCP** <br/> *(This Repository)* |
+| Capability / Trait | 🌉 **AGY-OpenCode Bridge MCP** <br/> *(This Repository)* | Risky OAuth Proxy Hacks <br/> *(e.g., `opencode-antigravity-auth`)* | CLI Subprocess Wrappers <br/> *(e.g., `opencode run`)* |
 | :--- | :---: | :---: | :---: |
-| **Account Safety & ToS** | 🔴 **High Ban Risk** (ToS violation, 403 blocks) | 🟡 Safe (Standard CLI) | 🟢 **100% Safe & Compliant** (Official local API) |
-| **Setup Friction** | 🔴 Complex OAuth extraction & browser hijacking | 🟡 Manual terminal commands | 🟢 **Zero-Config** (Auto-spawns & auto-authenticates) |
-| **Protocol** | 🔴 Unofficial HTTP reverse proxy | 🔴 Brittle Stdin/Stdout terminal pipe | 🟢 **Standard Model Context Protocol (MCP)** |
-| **Server Lifecycle** | 🔴 Manual background service | 🔴 Cold process spawned per turn | 🟢 **Autonomous Daemon Management** |
-| **Authentication Flow** | 🔴 Fake Google tokens | 🟡 OpenCode CLI login | 🟢 **Auto-captured ephemeral password token** |
-| **Interactive TTY Issues** | 🔴 Unstable proxy drops | 🔴 Frequent TTY freezes & prompt blocks | 🟢 **Zero TTY dependency** (Direct REST v2) |
-| **Multi-Turn Sessions** | ❌ Stateless / Flaky | ❌ Hard to maintain across child processes | 🟢 **Native Session IDs** (`/api/session`) |
-| **Provider Support** | 🔴 Limited to hijacked endpoint | 🟡 OpenCode CLI defaults | 🟢 **75+ Providers** (OpenCode, OpenRouter, Ollama, etc.) |
+| **Account Safety & ToS** | 🟢 **100% Safe & Compliant** (Official local API) | 🔴 **High Ban Risk** (ToS violation, 403 blocks) | 🟡 Safe (Standard CLI) |
+| **Setup Friction** | 🟢 **Zero-Config** (Auto-spawns & auto-authenticates) | 🔴 Complex OAuth extraction & browser hijacking | 🟡 Manual terminal commands |
+| **Protocol** | 🟢 **Standard Model Context Protocol (MCP)** | 🔴 Unofficial HTTP reverse proxy | 🔴 Brittle Stdin/Stdout terminal pipe |
+| **Server Lifecycle** | 🟢 **Autonomous Daemon Management** | 🔴 Manual background service | 🔴 Cold process spawned per turn |
+| **Authentication Flow** | 🟢 **Auto-captured ephemeral password token** | 🔴 Fake Google tokens | 🟡 OpenCode CLI login |
+| **Interactive TTY Issues** | 🟢 **Zero TTY dependency** (Direct REST v2) | 🔴 Unstable proxy drops | 🔴 Frequent TTY freezes & prompt blocks |
+| **Multi-Turn Sessions** | 🟢 **Native Session IDs** (`/api/session`) | ❌ Stateless / Flaky | ❌ Hard to maintain across child processes |
+| **Provider Support** | 🟢 **75+ Providers** (OpenCode, OpenRouter, Ollama, etc.) | 🔴 Limited to hijacked endpoint | 🟡 OpenCode CLI defaults |
 
 ---
 

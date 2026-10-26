@@ -28,10 +28,15 @@
 
 Developers using **Google Antigravity** (powered by Gemini 4 Argon) often face two critical dilemmas when trying to offload repetitive code implementation, test generation, and refactoring:
 
-### 1. The Reverse-Proxy OAuth Trap (`opencode-antigravity-auth`)
-Several third-party hacks attempt to bridge OpenCode and Google Antigravity by reverse-proxying Google OAuth tokens or impersonating Google Cloud internal endpoints. 
-> [!CAUTION]
-> **Account Ban & Suspension Risk:** Google actively monitors internal API signatures and request fingerprints. Using unauthorized OAuth proxies like `opencode-antigravity-auth` triggers automated anti-abuse telemetry, frequent `403 Forbidden` API cutoffs, and permanent Google account suspensions under Google Workspace & Cloud Terms of Service.
+### 1. The Risk of Unofficial OAuth Reverse-Proxies (and Why This Bridge Is 100% Safe)
+Some experimental community tools attempt to bridge OpenCode and Google Antigravity by reverse-proxying Google OAuth tokens or spoofing internal Google Cloud endpoints. Such approaches violate Google Terms of Service and trigger automated abuse detection (often resulting in `403 Forbidden` errors or Google account restrictions).
+
+> [!NOTE]
+> **🛡️ Zero Ban Risk & 100% Legitimate by Design:**  
+> **AGY-OpenCode Bridge MCP does NOT touch, spoof, or proxy your Google account credentials or tokens.**  
+> - **Antigravity** runs natively inside its authorized environment (with your legitimate Gemini account).  
+> - **OpenCode** runs entirely locally on your machine via its own official HTTP server, using standard local provider keys or OpenCode's **free DeepSeek V4.1 Flash tier**.  
+> - All communication occurs purely over local `127.0.0.1` JSON-RPC and REST. There is zero Google ToS violation and **zero risk to your Google account**.
 
 ### 2. Fragile CLI Subprocess Spawners (`opencode run`)
 Other tools attempt to invoke `opencode run` via raw command-line child processes. This approach is notoriously fragile:

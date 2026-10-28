@@ -12,7 +12,7 @@ const net = require('net');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
-const { spawn, execSync } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 
 const STATE_FILE_PATH = path.join(os.tmpdir(), 'agy-opencode-bridge-state.json');
 
@@ -416,12 +416,18 @@ async function stopServer() {
 
   if (state && state.pid) {
     try {
-      if (process.platform === 'win32') {
-        execSync(`taskkill /pid ${state.pid} /T /F`, { stdio: 'ignore' });
-      } else {
-        process.kill(state.pid, 'SIGTERM');
+      const pidNum = parseInt(state.pid, 10);
+      if (Number.isInteger(pidNum) && pidNum > 0) {
+        if (process.platform === 'win32') {
+          spawnSync('taskkill', ['/pid', String(pidNum), '/T', '/F'], {
+            stdio: 'ignore',
+            windowsHide: true
+          });
+        } else {
+          process.kill(pidNum, 'SIGTERM');
+        }
+        killed = true;
       }
-      killed = true;
     } catch {
       // Process may already have terminated
     }

@@ -48,6 +48,12 @@ const TOOL_DEFINITIONS = [
         }
       },
       required: ['prompt']
+    },
+    annotations: {
+      readOnlyHint: false,
+      destructiveHint: true,
+      idempotentHint: false,
+      openWorldHint: true
     }
   },
   {
@@ -70,6 +76,12 @@ const TOOL_DEFINITIONS = [
           default: false
         }
       }
+    },
+    annotations: {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false
     }
   },
   {
@@ -85,6 +97,12 @@ const TOOL_DEFINITIONS = [
           default: 'status'
         }
       }
+    },
+    annotations: {
+      readOnlyHint: false,
+      destructiveHint: true,
+      idempotentHint: false,
+      openWorldHint: false
     }
   }
 ];

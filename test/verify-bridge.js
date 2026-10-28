@@ -7,7 +7,10 @@
  * 3. Model listing and filtering (listModels)
  * 4. Subagent task execution with reasoning effort (runSubagentPrompt)
  * 5. Server status query (getServerStatus)
- * 6. MCP tool execution dispatch (executeTool)
+ * 6. Tool annotations compliance validation (m8ven / OpenAI / MCP spec)
+ * 7. MCP tool dispatch: opencode_list_models
+ * 8. MCP tool dispatch: opencode_server_control
+ * 9. MCP tool dispatch: opencode_delegate_task
  */
 
 const path = require('path');
@@ -83,13 +86,55 @@ async function runVerification() {
     console.log(`   Server URL: ${status.url}`);
     console.log('   ✅ Server status verified.\n');
 
-    // 6. MCP Tool Dispatch Test
-    console.log('🛠️ [Step 6] Testing MCP tool execution (opencode_list_models)...');
-    const toolOutput = await executeTool('opencode_list_models', { provider: 'opencode', query: 'deepseek' });
-    if (!toolOutput || !toolOutput.includes('deepseek')) {
-      throw new Error('Tool execution did not return expected model table output.');
+    // 6. Tool Annotations Compliance Test
+    console.log('📐 [Step 6] Validating MCP tool annotations compliance (m8ven / OpenAI / MCP spec)...');
+    const expectedTools = ['opencode_delegate_task', 'opencode_list_models', 'opencode_server_control'];
+    for (const toolName of expectedTools) {
+      const def = TOOL_DEFINITIONS.find(t => t.name === toolName);
+      if (!def) {
+        throw new Error(`Tool "${toolName}" missing from TOOL_DEFINITIONS.`);
+      }
+      if (!def.annotations) {
+        throw new Error(`Tool "${toolName}" missing annotations object.`);
+      }
+      const { readOnlyHint, destructiveHint, idempotentHint, openWorldHint } = def.annotations;
+      if (typeof readOnlyHint !== 'boolean' || typeof destructiveHint !== 'boolean' ||
+          typeof idempotentHint !== 'boolean' || typeof openWorldHint !== 'boolean') {
+        throw new Error(`Tool "${toolName}" annotations must have boolean values for readOnlyHint, destructiveHint, idempotentHint, and openWorldHint.`);
+      }
+      console.log(`   - ${toolName}: readOnly=${readOnlyHint}, destructive=${destructiveHint}, idempotent=${idempotentHint}, openWorld=${openWorldHint}`);
     }
-    console.log('   ✅ MCP tool executed and formatted output successfully.\n');
+    console.log('   ✅ All tool annotations conform to specification.\n');
+
+    // 7. MCP Tool Dispatch: opencode_list_models
+    console.log('🛠️ [Step 7] Testing MCP tool execution (opencode_list_models)...');
+    const listModelsOutput = await executeTool('opencode_list_models', { provider: 'opencode', query: 'deepseek' });
+    if (!listModelsOutput || !listModelsOutput.includes('deepseek')) {
+      throw new Error('Tool "opencode_list_models" execution did not return expected model table output.');
+    }
+    console.log('   ✅ "opencode_list_models" executed and formatted output successfully.\n');
+
+    // 8. MCP Tool Dispatch: opencode_server_control
+    console.log('🛠️ [Step 8] Testing MCP tool execution (opencode_server_control)...');
+    const serverControlOutput = await executeTool('opencode_server_control', { action: 'status' });
+    if (!serverControlOutput || !serverControlOutput.includes('OpenCode Server Status')) {
+      throw new Error('Tool "opencode_server_control" execution did not return expected status output.');
+    }
+    console.log('   ✅ "opencode_server_control" executed and returned server status.\n');
+
+    // 9. MCP Tool Dispatch: opencode_delegate_task
+    console.log('🛠️ [Step 9] Testing MCP tool execution (opencode_delegate_task)...');
+    const delegateOutput = await executeTool('opencode_delegate_task', {
+      prompt: 'Respond with exactly: TOOL_DELEGATE_SUCCESS',
+      provider: 'opencode',
+      model: 'deepseek-v4.1-flash-free',
+      effort: 'low',
+      title: 'bridge-tool-verify-test'
+    });
+    if (!delegateOutput || !delegateOutput.includes('OpenCode Subagent Response')) {
+      throw new Error('Tool "opencode_delegate_task" execution did not return expected subagent response format.');
+    }
+    console.log('   ✅ "opencode_delegate_task" executed and returned subagent output.\n');
 
     console.log('====================================================');
     console.log('🎉 ALL OPENCODE BRIDGE MCP TESTS PASSED SUCCESSFULLY');
